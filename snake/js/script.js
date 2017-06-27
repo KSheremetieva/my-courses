@@ -49,10 +49,22 @@ const config = {
 	main: document.querySelector('.main')
 };
 
-
 document.addEventListener("DOMContentLoaded", ready);
 function ready(){
+	let button = document.getElementById('button');
+	console.log(button);
+	button.addEventListener('click', start);
+};
+
+// var button = document.querySelector('.button'); // почему не работает??
+
+// var but = document.getElementById('button'); //не работает
+
+function start(){
+	let button = document.getElementById('button');
+	console.log(button);
+	button.style.display = 'none';
 	var snake = new Snake(config);
 	snake.createArr();
 	snake.drawArr();
-};
+}
