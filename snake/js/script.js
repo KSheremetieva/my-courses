@@ -1,4 +1,4 @@
-function MainArr(){
+function Snake(){
 	this.width = arguments[0] || 50;
 	this.height = arguments[1] || 50;
 	this.arr = [];
@@ -8,8 +8,8 @@ function MainArr(){
 
 
 
-MainArr.prototype = {
-	constructor: MainArr,
+Snake.prototype = {
+	constructor: Snake,
 	createArr: function(){
 		for(let i = 0; i < this.width; i++){
 			this.arr[i] = [];
@@ -30,7 +30,7 @@ MainArr.prototype = {
 			this.main.style.marginLeft = '20%';
 			this.main.style.boxShadow = '0px 0px 210px 13px rgba(61,71,80,1)';
 			for(let j = 0; j < row.length; j++){
-				console.log(this.main)
+				// console.log(this.main);
 				let div = document.createElement('div');
 				div.className = 'cell';
 				div.style.width = '13px';
@@ -52,7 +52,7 @@ MainArr.prototype = {
 };
 document.addEventListener("DOMContentLoaded", ready);
 function ready(){
-	var mainArr = new MainArr();
-	mainArr.createArr();
-	mainArr.drawArr();
+	var snake = new Snake();
+	snake.createArr();
+	snake.drawArr();
 };
