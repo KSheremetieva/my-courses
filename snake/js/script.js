@@ -1,12 +1,10 @@
-function Snake(){
-	this.width = arguments[0] || 50;
-	this.height = arguments[1] || 50;
-	this.arr = [];
-	this.cells = [];
+function Snake(config){
+	this.width = config.width;
+	this.height = config.height;
+	this.arr = config.arr;
+	this.cells = config.cells;
 	this.main = document.querySelector('.main');
 };
-
-
 
 Snake.prototype = {
 	constructor: Snake,
@@ -50,9 +48,19 @@ Snake.prototype = {
 		}
 	}
 };
+
+const config = {
+	width: 50,
+	height: 50,
+	arr: [],
+	cells: [],
+	main: document.querySelector('.main')
+};
+
+
 document.addEventListener("DOMContentLoaded", ready);
 function ready(){
-	var snake = new Snake();
+	var snake = new Snake(config);
 	snake.createArr();
 	snake.drawArr();
 };
