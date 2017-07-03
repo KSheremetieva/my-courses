@@ -1,3 +1,6 @@
+"use strict";
+
+(function(){
 function Snake(config){
 	this.width = config.width;
 	this.height = config.height;
@@ -22,7 +25,7 @@ Snake.prototype = {
 		for(let i = 0; i < this.arr.length; i++){
 			let row = this.arr[i];
 			let inRow = document.createElement('div');
-			inRow.style.height = '13px';
+			// inRow.style.height = '13px';
 			for(let j = 0; j < row.length; j++){
 				// console.log(this.main);
 				let div = document.createElement('div');
@@ -34,13 +37,14 @@ Snake.prototype = {
 				}else{
 					div.style.backgroundColor = '#FF0000';
 				}
-				inRow.appendChild(div);
+				// inRow.appendChild(div);
+				this.main.appendChild(div)
 			}
-			this.main.appendChild(inRow)
+			// this.main.appendChild(div)
 		}
 	}
 };
-
+ 
 const config = {
 	width: 50,
 	height: 50,
@@ -64,7 +68,10 @@ function start(){
 	let button = document.getElementById('button');
 	console.log(button);
 	button.style.display = 'none';
+	let main = document.querySelector('main');
+	main.style.display ="block";
 	var snake = new Snake(config);
 	snake.createArr();
 	snake.drawArr();
 }
+}());
