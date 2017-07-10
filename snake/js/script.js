@@ -12,7 +12,7 @@ function MainField(config){
 	this.direction = config.direction;
 	this._createArr();
 	this._drawArr();
-	this._moveSnake(this.direction, this.snake);
+	this._moveSnake();
 };
 
 MainField.prototype = {
@@ -34,45 +34,63 @@ MainField.prototype = {
 				div.className = 'cell whiteBox';
 				div.setAttribute('id', this._generateId(j, i));
 				this.main.appendChild(div);
-				// console.log(div);
 			}
 		}
-		// let d = document.getElementById(this._generateId(0, 0));
-		// d.className += " greenBox";
 	},
 	_generateId: function(i, j){
 		return "x" + i + "y" + j;
 	},
 	_moveSnake: function(direction, snakePos){
 		let _this = this;
-		let snakeX = snakePos.x;
-		let snakeY = snakePos.y;
-		let d = document.getElementById(this._generateId(snakeX, snakeY));
-		let timer = setInterval(function(){
-			// d.className += " greenBox";
+		setInterval(function(){
+			let snakeX = _this.snake.x;
+			let snakeY = _this.snake.y;
+			if(_this.direction == 'down'){
+				//Clean before
+				let snakeY_bef = _this.snake.y - 1;
+				if(snakeY_bef >= 0){
+				_this._toggle(snakeX, snakeY_bef);
+				};
+				_this._toggle(snakeX, snakeY);
+				_this.snake.y++;
+			};
 
-			if(direction == 'down'){
-				// if(snakeY == 0){
-				// 	d.className = d.className.replace(' greenBox', ' whiteBox');	
-				// }
-				// d.className = d.className.replace(' greenBox', ' whiteBox');
+			if(_this.direction == 'up'){
+				//Clean after
+				let snakeY_aft = _this.snake.y +1;
+				if(snakeY_aft <= 49){
+				_this._toggle(snakeX, snakeY_aft);
+				};
+				_this._toggle(snakeX, snakeY);
+				_this.snake.y--;
+			};
+			
+			if(_this.direction == 'right'){
+				//Clean before
+				let snakeX_bef = _this.snake.x -1;
+				if(snakeX_bef >= 0){
+					_this._toggle(snakeX_bef, snakeY);
+				};
+				_this._toggle(snakeX, snakeY);
+				_this.snake.x++;
+			};
+			
+			if(_this.direction == 'left'){
+				//Clean after
+				let snakeX_aft = _this.snake.x +1;
+				if(snakeX_aft <= 49){
+					_this._toggle(snakeX_aft, snakeY);
+				};
+				_this._toggle(snakeX, snakeY);
+				_this.snake.x--;
+			};
 
-				let w = document.getElementById(_this._generateId(snakeX, snakeY));
-				w.className += ' whiteBox';
-				w.className = w.className.replace(' greenBox', ' whiteBox');
-
-				snakeY++;
-				let s = document.getElementById(_this._generateId(snakeX, snakeY));
-				s.className += " greenBox";
-				console.log(s)
-			}
-			console.log(d)
-		}, 1000)
-
-		// switch (this.direction){
-		// 	case 'down': 
-
-		// }
+		},1000);
+	},
+	_toggle: function(i, y){
+		console.log(i,y)
+		let x = document.getElementById(this._generateId(i, y));
+		x.classList.toggle('greenBox');
 	}
 };
  
@@ -83,46 +101,29 @@ const config = {
 	cells: [],
 	main: document.querySelector('.main'),
 	length: 1,
-	snake: {x:0, y:0},
-	direction: 'down'
+	snake: {x:25, y:25},
+	apple: {x:15, y:27},
+	direction: 'left'
 };
 
-
-
-function SnakeGame(arg1, arg2){
-	MainField.prototype.constructor.bind(this, arguments);
-	this.name = arg1;
+function SnakeGame(){
+	MainField.prototype.constructor.apply(this, arguments);
 };
 
 SnakeGame.prototype = Object.create(MainField.prototype);
-SnakeGame.prototype.check = function(){
-	console.log(this.snake);
-}
-
-
 
 document.addEventListener("DOMContentLoaded", ready);
 function ready(){
 	let button = document.getElementById('button');
-	// console.log(button);
 	button.addEventListener('click', start);
 };
 
 function start(){
 	let button = document.getElementById('button');
-	// console.log(button);
 	button.style.display = 'none';
 	let main = document.querySelector('main');
 	main.style.display ="block";
-	var mainField = new MainField(config);
-	// mainField._drawArr();
-	// var snakeGame = new SnakeGame('snake');
-	// snakeGame.check();
-	// snakeGame._drawArr();
-	// document.addEventListener('keydown', (e)=>{
-		// mainField._moveSnake(e);
-		// snakeGame._moveSnake(e)
-	// });
+	var snakeGame = new SnakeGame(config);
 };
 
 }());
