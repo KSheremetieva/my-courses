@@ -11,9 +11,12 @@ function MainField(config){
 	this.snake = config.snake;
 	this.direction = config.direction;
 	this.direct = config.direct;
+	this.timer;
 	this._createArr();
 	this._drawMap();
 	this._drawSnake(this.snake);
+	// this._moveSnake(); //убрать :)  this.direction, this.snake
+	// this._toggleGreen();
 };
 
 MainField.prototype = {
@@ -35,25 +38,45 @@ MainField.prototype = {
 				div.className = 'cell'; //whiteBox
 				div.setAttribute('id', this._generateId(j, i));
 				this.main.appendChild(div);
+				// console.log(div);
 			}
 		}
+		// let d = document.getElementById(this._generateId(0, 0));
+		// d.className += " greenBox";
 	},
 	_drawSnake: function(arg){
+		// for(let i = 0; i < ){
 		let s = arg;
 		console.log(s)
+		// console.log(this.snake.length);
 		for(let i = 0; i < s.length; i++){
+			// console.log(this.snake[i].y)
 			let a = this._containsCl(s[i].x, s[i].y);
 			if(!a){
 
 				console.log('tut')
 				this._toggleGreen(s[i].x, s[i].y);
 			}
+			// else{
+			// 	this._toggleGreen(s[i].x, s[i].y);
+			// }
 		}
 	},
+	// _moveSnake: function(){
+	// 	setInterval(function(){
+	// 		let snakeX = _this.snake.x;
+	// 		let snakeY = _this.snake.y;
+	// 		console.log(snakeX, snakeY);
+	// 		if(_this.direction == 'up'){
+	// 			console.log('up')
+	// 		};
+	// 	},1000);
+	// },
 	_generateId: function(i, j){
 		return "x" + i + "y" + j;
 	},
 	_toggleGreen: function(x, y){
+		// console.log(x,y);
 		let elem = document.getElementById(this._generateId(x, y));
 		elem.classList.toggle('greenBox');
 	},
@@ -84,36 +107,60 @@ const config = {
 
 function SnakeGame(){
 	MainField.prototype.constructor.apply(this, arguments);
+	// this.name = arg1;
 };
 
 SnakeGame.prototype = Object.create(MainField.prototype);
 SnakeGame.prototype._snakeDirection = function(e){
 	switch (e.keyCode){
 		case (38):
+		// console.log('vcx')
 			this.direction = 'up';
 			break;
 		case (40):
+		// console.log('vcx')
 			this.direction = 'down';
 			break;
 		case (39):
+		// console.log('vcx')
 			this.direction = 'right';
+			// this.direct.before = this.direct.now;
+			// this.direct.now = 'right';
 			break;
 		case (37):
+		// console.log('vcx')
 			this.direction = 'left';
+			// this.direct.before = this.direct.now;
+			// this.direct.now = 'left';
 			break;
 	};
 };
 SnakeGame.prototype._moveSnake = function(){
 	let _this = this;
-	setInterval(function(){
+	this.timer = setInterval(function(){
 		let snakeLeng = _this.snake.length-1;
 		let snakeX = _this.snake[snakeLeng].x;
 		let snakeY = _this.snake[snakeLeng].y;
+		// console.log(snakeX, snakeY);
+		// if(_this.direction == 'up'){
+		// 	// Добавляем новый элемент с движением вверх
+		// 	--snakeY;
+		// 	_this.snake.push({x: snakeX, y: snakeY});
+		// 	// Убираем цвет у удаленного элемента массива snake
+		// 	let q = _this.snake.shift();
+		// 	// console.log(q)
+		// 	_this._toggleGreen(q.x, q.y );
+		// 	// console.log(snakeLeng);
+		// 	// console.log(_this.snake.length)
 
+		// 	// Отрисовка массива с новыми координатами змейки
+		// 	_this._drawSnake(_this.snake);
+		// };
 		switch (_this.direction){
 			case ('up'):
 				// Добавляем новый элемент с движением вверх
 				--snakeY;
+				_this._checkNextStep(snakeY);
 				_this.snake.push({x: snakeX, y: snakeY});
 				// Убираем цвет у удаленного элемента массива snake
 				let up = _this.snake.shift();
@@ -124,6 +171,7 @@ SnakeGame.prototype._moveSnake = function(){
 
 			case ('down'):
 				++snakeY;
+				_this._checkNextStep(snakeY);
 				_this.snake.push({x: snakeX, y: snakeY});
 				let down = _this.snake.shift();
 				_this._toggleGreen(down.x, down.y);
@@ -132,6 +180,7 @@ SnakeGame.prototype._moveSnake = function(){
 
 			case ('left'):
 				--snakeX;
+				_this._checkNextStep(snakeX);
 				_this.snake.push({x: snakeX, y: snakeY});
 				let left = _this.snake.shift();
 				_this._toggleGreen(left.x, left.y);
@@ -140,6 +189,7 @@ SnakeGame.prototype._moveSnake = function(){
 
 			case ('right'):
 				++snakeX;
+				_this._checkNextStep(snakeX);
 				_this.snake.push({x: snakeX, y: snakeY});
 				let right = _this.snake.shift();
 				_this._toggleGreen(right.x, right.y);
@@ -148,7 +198,18 @@ SnakeGame.prototype._moveSnake = function(){
 		}
 	},1000);
 };
-
+SnakeGame.prototype._checkNextStep = function(coordinate){
+	if(coordinate == 0 || coordinate >= 50){
+		console.log('Game Over');
+		this._stop();
+	}
+};
+SnakeGame.prototype._stop = function(){
+	clearInterval(this.timer);
+	this.main.style.display = 'none';
+	let over = document.querySelector('.over');
+	over.style.display = 'inline-block';
+};
 
 
 document.addEventListener("DOMContentLoaded", ready);
@@ -163,7 +224,7 @@ function start(){
 	let main = document.querySelector('main');
 	main.style.display ="block";
 	snakeGame = new SnakeGame(config);
-	snakeGame._moveSnake();
+	snakeGame._moveSnake();  //???????? не работает
 	//direction
 	document.addEventListener('keydown', direction);
 };
