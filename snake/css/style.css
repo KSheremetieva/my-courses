@@ -1,15 +1,12 @@
 
 body{
-	background-color: #13182C;
+	background-color: rgba(0,0,62,1);
 }
 
 main{
 	display: none;
 	width: 600px;
 	height: 600px;
-	/*border: 1px solid red;*/
-	/*margin-left: 20%;*/
-	box-shadow:0px 0px 210px 13px rgba(61,71,80,1);
 	position:absolute;
 	top: 5%;
 	left: 26%;
@@ -31,10 +28,10 @@ button:hover{
 }
 
 .cell{
-	/*display: inline-block;*/
 	float: left;
 	width: 10px;
 	height: 10px;
+	background-color: white;
 	border: 1px solid rgba(44,44,44,0.1);
 }
 
